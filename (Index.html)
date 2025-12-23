@@ -1,28 +1,41 @@
-// sw.js
-const CACHE_NAME = 'my-app-cache-v1';
-const ASSETS = [
-  '/',           // The homepage
-  '/index.html',
-  '/styles.css', // Add your CSS file names
-  '/app.js',     // Add your JS file names
-  // List other static images/icons here
-];
 
-// Install: Save files to cache
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
-    })
-  );
-});
+            const network = document.getElementById('network').value;
 
-// Fetch: Serve files from cache when offline
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      // Return cached version if found, otherwise fetch from network
-      return cachedResponse || fetch(event.request);
-    })
-  );
-});
+            if (isNaN(amount) || amount <= 0) {
+                alert("Please enter a valid amount.");
+                return;
+            }
+            if (amount < 100) {
+                alert("Minimum withdrawal is $100.");
+                return;
+            }
+            if (amount > balance) {
+                alert("Insufficient balance.");
+                return;
+            }
+
+            // Network Validation
+            if (network === "TRC20" && !address.startsWith("T")) {
+                alert("Invalid TRC20 Address. Must start with 'T'.");
+                return;
+            }
+            if (network === "POLYGON" && !address.startsWith("0x")) {
+                alert("Invalid Polygon Address. Must start with '0x'.");
+                return;
+            }
+
+            // Success
+            balance -= amount;
+            updateUI();
+            alert(`Success!\n$${amount} USDT withdrawn to ${network}.\nTx ID: Simulated-12345`);
+            hideWithdrawal();
+        }
+
+        function loadState() {
+            const savedBal = localStorage.getItem('minerBalance');
+            if (savedBal) balance = parseFloat(savedBal);
+            updateUI();
+        }
+    </script>
+</body>
+</html>
